@@ -39,10 +39,9 @@ jobs:
   build-with-venv:
     docker:
       - image: circleci/python:3.7.3
+    working_directory: ~/repo
     steps:
       - checkout
-      - run: sudo chown -R circleci:circleci /usr/local/bin
-      - run: sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
       - restore_cache:
           key: python-requirements-V3-{{ checksum "requirements.txt" }}
       - run:
@@ -53,11 +52,13 @@ jobs:
             pip install -r requirements.txt
       - save_cache:
           paths:
-            - ./venv
+            - venv/
+            - venv
           key: python-requirements-V3-{{ checksum "requirements.txt" }}
   test-with-venv:
     docker:
       - image: circleci/python:3.7.3
+    working_directory: ~/repo
     steps:
       - checkout
       - run: sudo chown -R circleci:circleci /usr/local/bin
@@ -66,8 +67,6 @@ jobs:
           key: python-requirements-V3-{{ checksum "requirements.txt" }}
       - run:
           command: |
-            sudo pip3 install virtualenv
-            virtualenv -p python3 venv
             source venv/bin/activate
             python build/genoken/modules_test.py
 
@@ -76,12 +75,18 @@ jobs:
 workflows:
   build_and_test:
     jobs:
-      - build-install-packages
-      - test-simple-modules:
+#      - build-install-packages
+      - build-with-venv
+#      - test-simple-modules:
+#          requires:
+#            - build-install-packages
+      - test-with-venv:
           requires:
-            - build-install-packages
-      - hold:
-          type: approval
-          requires:
-            - build-install-packages
-            - test-simple-modules
+            - build-with-venv
+#      - hold:
+#          type: approval
+#          requires:
+#            - build-install-packages
+#            - test-simple-modules
+#            - build-with-venv
+#            - test-with-venv
