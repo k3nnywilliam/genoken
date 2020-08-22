@@ -4,6 +4,7 @@ jobs:
   build:
     docker:
       - image: circleci/python:3.7.3
+    working_directory: ~/repo
     steps:
       - checkout
       - run: sudo chown -R circleci:circleci /usr/local/bin
@@ -23,6 +24,7 @@ jobs:
   test:
     docker:
       - image: circleci/python:3.7.3
+    working_directory: ~/repo
     steps:
       - checkout
       - run: sudo chown -R circleci:circleci /usr/local/bin
@@ -78,19 +80,8 @@ workflows:
       - test:
           requires:
             - build
-      - build-with-venv:
-          requires:
-            - build
-            - test
-      - test-with-venv:
-          requires:
-            - build
-            - test
-            - build-with-venv
       - hold:
           type: approval
           requires:
             - build
             - test
-            - build-with-venv
-            - test-with-venv
