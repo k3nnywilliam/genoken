@@ -13,3 +13,6 @@ jobs:
             sudo pip install pipenv
             pipenv install
             sudo pip install -r requirements.txt
+      - run:
+          command: |
+            python build/genoken/modules_test.py
