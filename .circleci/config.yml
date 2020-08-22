@@ -9,7 +9,7 @@ jobs:
       - run: sudo chown -R circleci:circleci /usr/local/bin
       - run: sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
       - restore_cache:
-          key: python-requirements-V2-{{ checksum "requirements.txt" }}
+          key: python-requirements-V3-{{ checksum "requirements.txt" }}
       - run:
           command: |
             sudo pip install pipenv
@@ -19,14 +19,14 @@ jobs:
           paths:
             - "~/.cache/pip"
             - "/usr/local/lib/python3.7/site-packages"
-          key: python-requirements-V2-{{ checksum "requirements.txt" }}
+          key: python-requirements-V3-{{ checksum "requirements.txt" }}
   test:
     docker:
       - image: circleci/python:3.7.3
     steps:
       - checkout
       - restore_cache:
-            key: python-requirements-V2-{{ checksum "requirements.txt" }}
+            key: python-requirements-V3-{{ checksum "requirements.txt" }}
       - run:
           command: |
             sudo pip install pipenv
