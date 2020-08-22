@@ -8,14 +8,8 @@ jobs:
       - checkout
       - run: sudo chown -R circleci:circleci /usr/local/bin
       - run: sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
-      - restore_cache:
-          key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
       - run:
           command: |
-            sudo pip3 install pipenv
+            sudo pip install pipenv
             pipenv install
-            sudo pip3 install -r requirements.txt
-      - save_cache:
-          paths:
-            - ".venv"
-          key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+            sudo pip install -r requirements.txt
