@@ -26,7 +26,6 @@ jobs:
       - checkout
       - run:
           command: |
-            . venv/bin/activate
             python build/genoken/modules_test.py
 
 
