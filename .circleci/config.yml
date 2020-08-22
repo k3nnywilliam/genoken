@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  build:
+  build-install-packages:
     docker:
       - image: circleci/python:3.7.3
     working_directory: ~/repo
@@ -21,7 +21,7 @@ jobs:
             - "~/.cache/pip"
             - "/usr/local/lib/python3.7/site-packages"
           key: python-requirements-V3-{{ checksum "requirements.txt" }}
-  test:
+  test-simple-modules:
     docker:
       - image: circleci/python:3.7.3
     working_directory: ~/repo
@@ -76,12 +76,12 @@ jobs:
 workflows:
   build_and_test:
     jobs:
-      - build
-      - test:
+      - build-install-packages
+      - test-simple-modules:
           requires:
-            - build
+            - build-install-packages
       - hold:
           type: approval
           requires:
-            - build
-            - test
+            - build-install-packages
+            - test-simple-modules
