@@ -1,9 +1,12 @@
 version: 2.1
 
+orbs:
+  python: circleci/python@3.7.3
+
+
 jobs:
-  build:
-    docker:
-      - image: circleci/python:3.73
+  build-and-test:
+    executor: python/default
     steps:
       - run:
           command: |
@@ -15,3 +18,8 @@ jobs:
       - run:
           command: |
             python3 build/genoken/modules_test.py
+
+workflows:
+  main:
+    jobs:
+      - build-and-test
