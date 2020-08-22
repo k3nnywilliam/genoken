@@ -1,25 +1,9 @@
 version: 2.1
 
-orbs:
-  python: circleci/python@0.2.1
-
-
 jobs:
-  build-and-test:
-    executor: python/default
+  build:
+    docker:
+      - image: circleci/python:3.7.3
     steps:
-      - run:
-          command: |
-            sudo pip3 install pipenv
-            pipenv install
-      - run:
-          command: |
-            pip3 install -r requirements.txt
-      - run:
-          command: |
-            python3 build/genoken/modules_test.py
-
-workflows:
-  main:
-    jobs:
-      - build-and-test
+      - checkout
+      - run: pip3 install -r requirements.txt
