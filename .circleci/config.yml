@@ -14,19 +14,12 @@ jobs:
           command: |
             sudo pip install pipenv
             pipenv install
-            python3 -m venv venv
-            . venv/bin/activate
             sudo pip install -r requirements.txt
       - save_cache:
           paths:
-            - ".venv"
             - "~/.cache/pip"
             - "/usr/local/lib/python3.7/site-packages"
           key: python-requirements-V2-{{ checksum "requirements.txt" }}
-      - run:
-          command: |
-            . venv/bin/activate
-            python build/genoken/modules_test.py
   test:
     docker:
       - image: circleci/python:3.7.3
