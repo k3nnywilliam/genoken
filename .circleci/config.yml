@@ -21,6 +21,25 @@ jobs:
             - "~/.cache/pip"
             - "/usr/local/lib/python3.7/site-packages"
           key: python-requirements-V1-{{ checksum "requirements.txt" }}
+  test:
+    docker:
+      - image: circleci/python:3.7.3
+    steps:
       - run:
           command: |
             python build/genoken/modules_test.py
+
+
+# Orchestrate our job run sequence
+workflows:
+  build_and_test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - hold:
+          type: approval
+          requires:
+            - build
+            - test
