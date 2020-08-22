@@ -13,7 +13,7 @@ class GenoKenTest(unittest.TestCase):
     
     @timer_logging
     def test_blast_alignment(self):
-        result = 25 * 2
+        result = 25 * 3
         self.assertEqual(result, 50)
 
     def test_reverse_complement(self):
