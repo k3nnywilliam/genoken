@@ -64,6 +64,8 @@ jobs:
           key: python-requirements-V3-{{ checksum "requirements.txt" }}
       - run:
           command: |
+            sudo pip3 install virtualenv
+            virtualenv -p python3 venv
             source venv/bin/activate
             python build/genoken/modules_test.py
 
