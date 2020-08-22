@@ -12,14 +12,12 @@ jobs:
           key: python-requirements-V1-{{ checksum "requirements.txt" }}
       - run:
           command: |
-            sudo pip install --upgrade pip
-            sudo pip install pipenv
-            pipenv install
+            python3 -m venv venv
+            . venv/bin/activate
             sudo pip install -r requirements.txt
       - save_cache:
           paths:
-            - "~/.cache/pip"
-            - "/usr/local/lib/python3.7/site-packages"
+            - "venv"
           key: python-requirements-V1-{{ checksum "requirements.txt" }}
   test:
     docker:
@@ -27,6 +25,7 @@ jobs:
     steps:
       - run:
           command: |
+            . venv/bin/activate
             python build/genoken/modules_test.py
 
 
