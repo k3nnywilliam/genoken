@@ -31,6 +31,8 @@ jobs:
             key: python-requirements-V2-{{ checksum "requirements.txt" }}
       - run:
           command: |
+            sudo pip install pipenv
+            pipenv install
             python build/genoken/modules_test.py
 
 
