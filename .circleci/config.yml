@@ -8,11 +8,18 @@ jobs:
       - checkout
       - run: sudo chown -R circleci:circleci /usr/local/bin
       - run: sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
+      - restore_cache:
+          key: python-requirements-V1-{{ checksum "requirements.txt" }}
       - run:
           command: |
             sudo pip install pipenv
             pipenv install
             sudo pip install -r requirements.txt
+      - save_cache:
+          paths:
+            - "~/.cache/pip"
+            - "/usr/local/lib/python3.7/site-packages"
+          key: python-requirements-V1-{{ checksum "requirements.txt" }}
       - run:
           command: |
             python build/genoken/modules_test.py
