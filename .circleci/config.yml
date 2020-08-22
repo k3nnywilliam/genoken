@@ -12,6 +12,7 @@ jobs:
           key: python-requirements-V1-{{ checksum "requirements.txt" }}
       - run:
           command: |
+            sudo pip install --upgrade pip
             sudo pip install pipenv
             pipenv install
             sudo pip install -r requirements.txt
