@@ -8,5 +8,5 @@
 
 Genoken is an open source bioinformatics software developed by Kenny William Nyallau.
 
-LICENSE:
-Please read the details of the distribution license.
+## LICENSE
+This software is distributed with MIT license, Please read the details in the License file.
