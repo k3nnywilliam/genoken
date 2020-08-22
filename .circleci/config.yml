@@ -63,7 +63,6 @@ jobs:
           key: python-requirements-V3-{{ checksum "requirements.txt" }}
       - run:
           command: |
-            python3 -m venv venv
             . venv/bin/activate
             python3 build/genoken/modules_test.py
 
