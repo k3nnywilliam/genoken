@@ -33,7 +33,7 @@ jobs:
           command: |
             sudo pip install pipenv
             pipenv install
-            python build/genoken/modules_test.py
+            pipenv run python build/genoken/modules_test.py
 
 
 # Orchestrate our job run sequence
