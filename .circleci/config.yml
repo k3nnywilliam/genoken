@@ -47,7 +47,7 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install -r requirements.txt
+            pip3 install -r requirements.txt
       - save_cache:
           paths:
             - venv/
@@ -63,7 +63,9 @@ jobs:
           key: python-requirements-V3-{{ checksum "requirements.txt" }}
       - run:
           command: |
+            python3 -m venv venv
             . venv/bin/activate
+            pip3 install -r requirements.txt
             python3 build/genoken/modules_test.py
 
 
