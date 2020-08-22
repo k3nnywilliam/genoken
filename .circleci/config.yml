@@ -24,6 +24,8 @@ jobs:
     docker:
       - image: circleci/python:3.7.3
     steps:
+      - restore_cache:
+            key: python-requirements-V2-{{ checksum "requirements.txt" }}
       - run:
           command: |
             python build/genoken/modules_test.py
