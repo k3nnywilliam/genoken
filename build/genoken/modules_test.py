@@ -1,5 +1,5 @@
 import unittest
-from fasta.fastautil import FastaUtils
+from fasta import fastautil as fst
 from miscutil.util import *
 
 class GenoKenTest(unittest.TestCase):
@@ -12,9 +12,12 @@ class GenoKenTest(unittest.TestCase):
         pass
     
     @timer_logging
-    def test_blast_alignment(self):
-        result = 25 * 2
-        self.assertEqual(result, 50)
+    def test_blast_record(self):
+        pass
+
+    def test_multifasta(self):
+        util = fst.FastaUtils("/data/dna.example.fa")
+        util.get_multifasta_record()
 
     def test_reverse_complement(self):
         pass
