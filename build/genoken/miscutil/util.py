@@ -10,11 +10,11 @@ class Generate_Dictionary(dict):
         self[key] = value
 
 class Utils:
-  def timer_logging(self, func):
-    def timer_wrapper(*args, **kwargs):
+  def timer_logging(func):
+    def timer_wrapper(self,*args, **kwargs):
       import datetime                 
       start = datetime.datetime.now()                     
-      result = func(*args, **kwargs)
+      result = func(self,*args, **kwargs)
       end = datetime.datetime.now()               
       print(f"\nElapsed Time Log = {end-start}")
       return result
