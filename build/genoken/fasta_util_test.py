@@ -9,7 +9,7 @@ def main():
     #records_len, record_seqs, record_ids, record_counts, \
     dict_id_seqs  = genotest.get_fasta_record_info()
     #genotest.start_ORF(frame=2)
-    dna = "CCCATGCCCCCCCCCCCCCCCCCCCCCCCTAGCCCCCCCCTAATGATAG"
+    dna = "CCCATGCCCCCCCCCCTCCCCACCCGCCCTAGCCCCCCCCTAATGATAG"
     genotest.orf_tester(2)
     #genotest.tester(dna)
 
