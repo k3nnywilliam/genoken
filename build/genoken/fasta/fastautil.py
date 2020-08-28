@@ -10,7 +10,10 @@ import re
 class FastaUtils:
     def __init__(self, filepath):
         super().__init__()
-        self.path = filepath
+        try:
+            self.path = filepath
+        except IOError:
+            print(f"{self.path} cannot be opened.")
         self.result_handle = ''
         self.ls_records_len = set()
         self.ls_record_id = list()
@@ -87,7 +90,6 @@ class FastaUtils:
                 break
             for j in range(i+1, len(seq) - 1, 3):
                 stop = seq[j:j+3]
-                #print(stop)
                 if stop in constant.STOP_CODONS:
                     stop_pos = j
         len_longest_orf = stop_pos - start_pos+3
