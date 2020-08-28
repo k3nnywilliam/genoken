@@ -68,6 +68,7 @@ jobs:
             python build/genoken/modules_test.py
       - run:
           command: |
+            source venv/bin/activate
             python build/genoken/fasta_util_test.py
 
 # Orchestrate our job run sequence
