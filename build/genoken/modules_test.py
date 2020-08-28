@@ -1,6 +1,6 @@
 import unittest
 from fasta import fastautil as fst
-from miscutil.util import Utils as util
+from miscutil.util import GenokenUtils as util
 
 class GenoKenTest(unittest.TestCase):
     
