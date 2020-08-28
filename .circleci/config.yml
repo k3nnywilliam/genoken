@@ -36,7 +36,7 @@ jobs:
             sudo pip install pipenv
             pipenv install
             pipenv run python build/genoken/modules_test.py
-  build-with-venv:
+  build-genoken:
     docker:
       - image: circleci/python:3.7.3
     working_directory: ~/repo
@@ -54,7 +54,7 @@ jobs:
           paths:
             - venv
           key: venv-requirements-V1-{{ checksum "requirements.txt" }}
-  test-with-venv:
+  test-genoken:
     docker:
       - image: circleci/python:3.7.3
     working_directory: ~/repo
@@ -66,20 +66,22 @@ jobs:
           command: |
             source venv/bin/activate
             python build/genoken/modules_test.py
-
+      - run:
+          command: |
+            python build/genoken/fasta_util_test.py
 
 # Orchestrate our job run sequence
 workflows:
   build_and_test:
     jobs:
 #      - build-install-packages
-      - build-with-venv
+      - build-genoken
 #      - test-simple-modules:
 #          requires:
 #            - build-install-packages
-      - test-with-venv:
+      - test-genoken:
           requires:
-            - build-with-venv
+            - build-genoken
 #      - hold:
 #          type: approval
 #          requires:
