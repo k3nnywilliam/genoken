@@ -43,7 +43,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: venv-requirements-V1-{{ checksum "requirements.txt" }}
+          key: venv-requirements-V2-{{ checksum "requirements.txt" }}
       - run:
           command: |
             sudo pip3 install virtualenv
@@ -53,7 +53,7 @@ jobs:
       - save_cache:
           paths:
             - venv
-          key: venv-requirements-V1-{{ checksum "requirements.txt" }}
+          key: venv-requirements-V2-{{ checksum "requirements.txt" }}
   test-genoken:
     docker:
       - image: circleci/python:3.7.3
@@ -61,7 +61,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: venv-requirements-V1-{{ checksum "requirements.txt" }}
+          key: venv-requirements-V2-{{ checksum "requirements.txt" }}
       - run:
           command: |
             source venv/bin/activate
