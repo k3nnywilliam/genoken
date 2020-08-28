@@ -1,17 +1,17 @@
 import unittest
 from fasta import fastautil as fst
-from miscutil.util import GenokenUtils as util
+from miscutil.util import GenokenUtils
 
 class GenoKenTest(unittest.TestCase):
     
-    @util.timer_logging
+    @GenokenUtils.timerlogging
     def test_read_dna_file(self):
         pass
     
     def test_transcribe(self):
         pass
     
-    @util.timer_logging
+    @GenokenUtils.timerlogging
     def test_blast_record(self):
         pass
 
