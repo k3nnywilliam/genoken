@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #Created by Kenny William Nyallau 2020
 import os
+import datetime
 
 class Generate_Dictionary(dict):
     def __init__(self): 
@@ -10,20 +11,18 @@ class Generate_Dictionary(dict):
         self[key] = value
 
 class GenokenUtils:
-  def timer_logging(func):
-    def timer_wrapper(self,*args, **kwargs):
-      import datetime                 
+  @staticmethod
+  def timerlogging(func):
+    def timer_wrapper(*args, **kwargs):          
       start = datetime.datetime.now()                     
-      result = func(self,*args, **kwargs)
+      result = func(*args, **kwargs)
       end = datetime.datetime.now()               
-      print(f"\nElapsed Time Log = {end-start}")
+      print(f"\nElapsed Time = {end-start}")
       return result
     return timer_wrapper
-
-  def get_fasta_data(self):
-    '''
-    Get a list of fasta files in data directory
-    '''
+  
+  @staticmethod
+  def get_fasta_data(*args, **kwargs):
     DATA_DIR = os.path.join(os.path.abspath(os.curdir), 'data')
     files = list()
     if os.path.exists(DATA_DIR):
