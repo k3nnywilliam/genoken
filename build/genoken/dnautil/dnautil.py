@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #Created by Kenny William Nyallau 2020
-import constant
+from dnautil import constant
 
 class DNAUtils:
     def __init__(self, dna):
