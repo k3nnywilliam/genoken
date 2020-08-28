@@ -1,19 +1,27 @@
 # -*- coding: utf-8 -*-
 #Created by Kenny William Nyallau 2020
 
-from miscutil.util import Generate_Dictionary
+from miscutil.util import Generate_Dictionary, GenokenUtils
+from dnautil import constant
 from Bio.Blast import NCBIWWW, NCBIXML
-from Bio import SeqIO
+from Bio import SeqIO, Seq
 import re
 
 class FastaUtils:
-    def __init__(self, file):
+    def __init__(self, filepath):
         super().__init__()
-        self.path = file
+        self.path = filepath
         self.blast_record = ''
         self.fasta_string = ''
         self.result_handle = ''
+        self.seq_len = 0
+        self.record_count = 0
+        self.ls_records_len = set()
+        self.ls_record_id = list()
+        self.ls_record_seqs = list()
+        self.dict_id_seqs = Generate_Dictionary()
     
+    @GenokenUtils.timer_logging
     def init_blast_search(self):
         try:
             print(f"Fasta file: {self.path}")
@@ -28,68 +36,63 @@ class FastaUtils:
         self.blast_record = NCBIXML.read(self.result_handle)
         print(f"Blast record alignments: {len(self.blast_record.aligments)}")
         return self.blast_record
-
+    
+    @GenokenUtils.timer_logging
     def get_fasta_record_info(self):
         '''
-        This will generate cleaner info on the fasta records
+        This will generate various info of the fasta records
         '''
-        ls_records_len = set()
-        ls_record_id = list()
-        ls_record_seqs = list()
-        dict_id_seqs = Generate_Dictionary()
-        record_count = 0
+        self.record_count = 0
         
         for record in SeqIO.parse(self.path, "fasta"):
-            ls_records_len.add(len(record))
-            ls_record_id.append(record.id)
-            dict_id_seqs.add(record.id, str(record.seq))
-            ls_record_seqs.append(str(record.seq))
-            record_count+=1
-            
-        print(f"List of records lengths: {ls_records_len}")
-        print(f"Record count: {record_count}")
-        return ls_records_len, ls_record_seqs, ls_record_id, record_count, dict_id_seqs
+            #print(f"Repr: {repr(record.seq)}")
+            self.ls_records_len.add(len(record))
+            self.ls_record_id.append(record.id)
+            self.dict_id_seqs.add(record.id, str(record.seq))
+            self.ls_record_seqs.append(str(record.seq))
+            self.record_count+=1
+        print(f"Record count: {self.record_count}")
+        print(f"Longest sequence in file: {max(self.ls_records_len)}")
+        print(f"Shortest sequence in file: {min(self.ls_records_len)}")
+        return self.ls_records_len, self.ls_record_seqs, self.ls_record_id, self.record_count, self.dict_id_seqs
+    
+    
+    def start_ORF_finder_example(self, frame=0):
+        mylist = list()
+        for seq_id, seq in self.dict_id_seqs.items():
+            for orflen, orf in self.simple_ORF_finder(seq, frame):
+                mylist.append(orflen)
+        print(sorted(mylist))
+    
+    def simple_ORF_finder_example(self, seq, frame):
+        for i in range(frame, len(seq), 3):
+            codon1 = seq[i:i+3]
+            if codon1 == 'ATG':
+                position1 = i
+                for j in range(position1, len(seq), 3):
+                    codon2 = seq[j:j+3]
+                    if codon2 in constant.STOP_CODONS:
+                        position2 = j
+                        yield (position2-position1+3, seq[position1:position2+3])
+                        break
+    
+    def orf_tester(self, frame=0):
+        for seq_id, seq in self.dict_id_seqs.items():
+            self.find_ORF(seq, frame)
 
-    def get_repr_multifasta_record(self):
-        for seq_record in SeqIO.parse(self.path, "fasta"):
-            print(repr(seq_record.seq))
-            print(f"Sequence length: {len(seq_record)}")
-
-    #Another method to get sequences from fasta record
-    def get_each_sequence_from_fasta_record(self):
-        seqs = dict()
-        all_seqs = set()
-        f = open(self.path)
-        for line in f:
-            line = line.rstrip()
-            if line[0] == '>':
-                words = line.split()
-                name = words[0][:-1]
-                seqs[name] = ''
-            else:
-                seqs[name] = seqs[name] + line
-                all_seqs.add(seqs[name])
-        return all_seqs
+    def find_ORF(self, seq, frame=0):
+        start_pos = 0
+        stop_pos = 0
+        
+        for i in range(frame, len(seq), 3):
+            start=seq[i:i+3]
+            if start in constant.START_CODON:
+                start_pos = i
+                break
+            for j in range(i+1, len(seq) - 1, 3):
+                stop = seq[j:j+3]
+                #print(stop)
+                if stop in constant.STOP_CODONS:
+                    stop_pos = j
+        print(f"longest orf length {stop_pos - start_pos+3}")
     
-    def get_multifasta_record_count_and_len(self):
-        count = 0
-        record_len = set()
-        for record in SeqIO.parse(self.path, "fasta"):
-            count +=1
-            record_len.add(len(record))
-        return count, record_len
-    
-    def max_sequence_len(self, seq_len):
-        return max(seq_len)
-    
-    def min_sequence_len(self, seq_len):
-        return min(seq_len)
-    
-    def ORF_finder(self, dict_id_seqs):
-        for seq_id, seq in dict_id_seqs.items():
-            pattern = re.compile(r'(?=(ATG(?:...)*?)(?=TAG|TGA|TAA))', re.I)
-            match = pattern.findall(seq)
-            start = match.start()
-            end = match.end()
-            print(seq_id)
-            print(seq)

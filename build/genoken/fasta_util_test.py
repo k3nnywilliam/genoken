@@ -1,17 +1,17 @@
 from fasta import fastautil as fst
-from miscutil.util import *
+from miscutil.util import GenokenUtils
 from Bio import SeqIO
 import os
 
-cur_path = os.getcwd()
-
 def main():
-    data = 'data/dna2.fasta'
-    datapath = os.path.join(cur_path, data)
-    genotest = fst.FastaUtils(datapath)
+    DATA_DIR = os.path.join(os.path.abspath(os.curdir), 'data')
+    genotest = fst.FastaUtils(os.path.join(DATA_DIR, 'dna2.fasta'))
     #records_len, record_seqs, record_ids, record_counts, \
     dict_id_seqs  = genotest.get_fasta_record_info()
-    genotest.ORF_finder(dict_id_seqs)
+    #genotest.start_ORF(frame=2)
+    dna = "CCCATGCCCCCCCCCCCCCCCCCCCCCCCTAGCCCCCCCCTAATGATAG"
+    genotest.orf_tester(2)
+    #genotest.tester(dna)
 
 if __name__ == "__main__":
     main()
