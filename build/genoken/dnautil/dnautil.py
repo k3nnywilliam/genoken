@@ -16,15 +16,16 @@ class DNAUtils:
                 break
         return stop_codon_found
     
-    def transcribe(self) -> list:
-        my_rna = list(self.dna)
+    def transcribe(self) -> str:
+        dna = list(self.dna)
         t_rna = list()
-        for i in range(len(my_rna)):
-            if 'T' in my_rna:
+        for i in range(len(dna)):
+            if dna[i] == 'T':
                 t_rna.append('U')
             else:
-                t_rna.append(my_rna[i])
-        return t_rna
+                t_rna.append(dna[i])
+        result = ''.join(t_rna)
+        return result
 
     def complement(self) -> str:
         self.letters = ''

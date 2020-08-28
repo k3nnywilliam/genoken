@@ -10,7 +10,10 @@ import re
 class FastaUtils:
     def __init__(self, filepath):
         super().__init__()
-        self.path = filepath
+        try:
+            self.path = filepath
+        except IOError:
+            print(f"{self.path} cannot be opened.")
         self.result_handle = ''
         self.ls_records_len = set()
         self.ls_record_id = list()
@@ -34,9 +37,6 @@ class FastaUtils:
         return blast_record
     
     def get_fasta_record_info(self):
-        '''
-        This will generate various info of the fasta records
-        '''
         self.record_count = 0
         for record in SeqIO.parse(self.path, "fasta"):
             #print(f"Repr: {repr(record.seq)}")
@@ -49,7 +49,6 @@ class FastaUtils:
         print(f"Longest sequence in file: {max(self.ls_records_len)}")
         print(f"Shortest sequence in file: {min(self.ls_records_len)}")
         return self.ls_records_len, self.ls_record_seqs, self.ls_record_id, self.record_count, self.dict_id_seqs
-    
     
     def start_ORF_finder_example(self, frame=0) -> list:
         mylist = list()
@@ -71,7 +70,6 @@ class FastaUtils:
                         yield (position2-position1+3, seq[position1:position2+3])
                         break
     
-    @GenokenUtils.timerlogging
     def orf_tester(self, frame=0):
         for seq_id, seq in self.dict_id_seqs.items():
             self.find_ORF(seq_id, seq, frame)
@@ -87,7 +85,6 @@ class FastaUtils:
                 break
             for j in range(i+1, len(seq) - 1, 3):
                 stop = seq[j:j+3]
-                #print(stop)
                 if stop in constant.STOP_CODONS:
                     stop_pos = j
         len_longest_orf = stop_pos - start_pos+3
