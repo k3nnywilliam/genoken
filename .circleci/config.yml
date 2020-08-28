@@ -70,6 +70,10 @@ jobs:
           command: |
             source venv/bin/activate
             python build/genoken/fasta_util_test.py
+      - run:
+          command: |
+            source venv/bin/activate
+            python build/genoken/dnautil/dnautil_test.py
 
 # Orchestrate our job run sequence
 workflows:
