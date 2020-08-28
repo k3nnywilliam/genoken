@@ -11,17 +11,13 @@ class FastaUtils:
     def __init__(self, filepath):
         super().__init__()
         self.path = filepath
-        self.blast_record = ''
-        self.fasta_string = ''
         self.result_handle = ''
-        self.seq_len = 0
-        self.record_count = 0
         self.ls_records_len = set()
         self.ls_record_id = list()
         self.ls_record_seqs = list()
         self.dict_id_seqs = Generate_Dictionary()
     
-    @GenokenUtils.timer_logging
+    @GenokenUtils.timerlogging
     def init_blast_search(self):
         try:
             print(f"Fasta file: {self.path}")
@@ -33,17 +29,15 @@ class FastaUtils:
             print(f"{self.path} cannot be opened.")
 
     def get_blast_record(self):
-        self.blast_record = NCBIXML.read(self.result_handle)
+        blast_record = NCBIXML.read(self.result_handle)
         print(f"Blast record alignments: {len(self.blast_record.aligments)}")
-        return self.blast_record
+        return blast_record
     
-    @GenokenUtils.timer_logging
     def get_fasta_record_info(self):
         '''
         This will generate various info of the fasta records
         '''
         self.record_count = 0
-        
         for record in SeqIO.parse(self.path, "fasta"):
             #print(f"Repr: {repr(record.seq)}")
             self.ls_records_len.add(len(record))
@@ -57,14 +51,15 @@ class FastaUtils:
         return self.ls_records_len, self.ls_record_seqs, self.ls_record_id, self.record_count, self.dict_id_seqs
     
     
-    def start_ORF_finder_example(self, frame=0):
+    def start_ORF_finder_example(self, frame=0) -> list:
         mylist = list()
         for seq_id, seq in self.dict_id_seqs.items():
-            for orflen, orf in self.simple_ORF_finder(seq, frame):
+            for orflen, orf in self.simple_ORF_finder_example(seq, frame):
                 mylist.append(orflen)
         print(sorted(mylist))
+        return mylist
     
-    def simple_ORF_finder_example(self, seq, frame):
+    def simple_ORF_finder_example(self, seq, frame=0):
         for i in range(frame, len(seq), 3):
             codon1 = seq[i:i+3]
             if codon1 == 'ATG':
@@ -76,14 +71,15 @@ class FastaUtils:
                         yield (position2-position1+3, seq[position1:position2+3])
                         break
     
+    @GenokenUtils.timerlogging
     def orf_tester(self, frame=0):
         for seq_id, seq in self.dict_id_seqs.items():
-            self.find_ORF(seq, frame)
+            self.find_ORF(seq_id, seq, frame)
 
-    def find_ORF(self, seq, frame=0):
+    def find_ORF(self, seq_id, seq, frame=0):
         start_pos = 0
         stop_pos = 0
-        
+        len_longest_orf = 0
         for i in range(frame, len(seq), 3):
             start=seq[i:i+3]
             if start in constant.START_CODON:
@@ -94,5 +90,8 @@ class FastaUtils:
                 #print(stop)
                 if stop in constant.STOP_CODONS:
                     stop_pos = j
-        print(f"longest orf length {stop_pos - start_pos+3}")
+        len_longest_orf = stop_pos - start_pos+3
+        result = {seq_id : len_longest_orf}
+        print(f"Longest ORF length: {result}")
+        return result
     
