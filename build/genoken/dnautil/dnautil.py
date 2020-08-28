@@ -1,28 +1,22 @@
 # -*- coding: utf-8 -*-
 #Created by Kenny William Nyallau 2020
-from Bio.Seq import Seq
+import constant
 
 class DNAUtils:
     def __init__(self, dna):
         super().__init__()
         self.dna = dna
+        self.letters = ''
 
     def has_stop_codon(self, stop_codons, frame=0):
         stop_codon_found = False
-        stop_codons = ['tga', 'tag', 'taa']
         
         for i in range(frame, len(self.dna), 3):
             codon = self.dna[i:i+3].lower()
-            if codon in stop_codons:
+            if codon in constant.STOP_CODONS:
                 stop_codon_found = True
                 break
         return stop_codon_found
-
-    def complement(self):
-        base_complement = {'A':'T', 'C': 'G', 'G':'C', 'T':'A', 'N':'N'}
-        letters = list(self.dna)
-        letters = [base_complement[base] for base in letters]
-        return ''.join(letters) 
     
     def transcribe(self):
         my_rna = list(self.dna)
@@ -31,12 +25,16 @@ class DNAUtils:
         for i in range(len(my_rna)):
             if 'T' in my_rna:
                 t_rna.append('U')
-            elif 't' in my_rna:
-                t_rna.append('u')
             else:
                 t_rna.append(my_rna[i])
         return t_rna
-                
+    
+    def complement(self):
+        self.letters = list(self.dna)
+        self.letters = [constant.BASE_COMPLEMENT[base] for base in self.letters]
+        return ''.join(self.letters)
+
     def reverse_complement(self):
-        rc_dna = list(self.dna)
-        return rc_dna[::-1]
+        complement_bases = self.complement()
+        reversed_complements = list(complement_bases)
+        return ''.join(reversed_complements[::-1])
