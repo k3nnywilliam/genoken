@@ -86,7 +86,7 @@ workflows:
 #      - hold:
 #          type: approval
 #          requires:
+#            - build-genoken
+#            - test-genoken
 #            - build-install-packages
 #            - test-simple-modules
-#            - build-with-venv
-#            - test-with-venv
