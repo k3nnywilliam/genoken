@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
+#!usr/bin/env python3
 #Created by Kenny William Nyallau 2020
-from dnautil import constant
+from dna import constant
 
 class DNAUtils:
     def __init__(self, dna):
@@ -17,6 +18,11 @@ class DNAUtils:
         return stop_codon_found
     
     def transcribe(self) -> str:
+        """Transcribe DNA to RNA
+
+        Returns:
+            str: concatenate the transcribed sequence
+        """
         dna = list(self.dna)
         t_rna = list()
         for i in range(len(dna)):
@@ -37,3 +43,25 @@ class DNAUtils:
         complement_bases = self.complement()
         reversed_complements = list(complement_bases)
         return ''.join(reversed_complements[::-1])
+    
+    def QtoPhred33(self, Q):
+        """Turn Q into Phred+33 ACII encoded quality
+
+        Args:
+            Q (float): base quality
+
+        Returns:
+            int: converts character to integer according to ASCII table
+        """
+        return chr(Q + 33)
+    
+    def phred33ToQ(self, qual):
+        """Turn Phred+33 ACII-encoded quality into Q
+
+        Args:
+            qual (int): 
+
+        Returns:
+            [type]: converts integer to character according to ASCII table
+        """
+        return ord(qual)-33

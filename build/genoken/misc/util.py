@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
+#!usr/bin/env python3
 #Created by Kenny William Nyallau 2020
+
 import os
 import datetime
 

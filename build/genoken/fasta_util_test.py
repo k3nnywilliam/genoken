@@ -1,5 +1,9 @@
+# -*- coding: utf-8 -*-
+#!usr/bin/env python3
+#Created by Kenny William Nyallau 2020
+
 from fasta.fastautil import FastaUtils
-from miscutil.util import GenokenUtils
+from misc.util import GenokenUtils
 from Bio import SeqIO
 import os
 

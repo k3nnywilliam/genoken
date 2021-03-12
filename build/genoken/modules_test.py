@@ -1,9 +1,13 @@
+# -*- coding: utf-8 -*-
+#!usr/bin/env python3
+#Created by Kenny William Nyallau 2020
+
 import unittest
 #import pytest
 import os
 from fasta.fastautil import FastaUtils
-from miscutil.util import GenokenUtils
-from dnautil.dnautil import DNAUtils
+from misc.util import GenokenUtils
+from dna.dnautil import DNAUtils
 
 short_seq = 'ATGATAGGCCTA'
 du = DNAUtils(short_seq)

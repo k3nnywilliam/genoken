@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+#!usr/bin/env python3
 #Created by Kenny William Nyallau 2020
 
-from miscutil.util import Generate_Dictionary, GenokenUtils
-from dnautil import constant
+from misc.util import Generate_Dictionary, GenokenUtils
+from dna import constant
 from Bio.Blast import NCBIWWW, NCBIXML
 from Bio import SeqIO, Seq
 import re
@@ -37,6 +38,15 @@ class FastaUtils:
         return blast_record
     
     def get_fasta_record_info(self):
+        """Returns a list of fasta file information
+
+        Returns:
+            list: Record lengths
+            list: Record sequences
+            list: Record ids
+            list: Count of records
+            dict: Key value pair of ids and sequences
+        """
         self.record_count = 0
         for record in SeqIO.parse(self.path, "fasta"):
             #print(f"Repr: {repr(record.seq)}")
@@ -51,6 +61,14 @@ class FastaUtils:
         return self.ls_records_len, self.ls_record_seqs, self.ls_record_id, self.record_count, self.dict_id_seqs
     
     def start_ORF_finder_example(self, frame=0) -> list:
+        """Example of open reading frame 
+
+        Args:
+            frame (int, optional): Reading frame. Defaults to 0.
+
+        Returns:
+            list: lengths of ORF
+        """
         mylist = list()
         for seq_id, seq in self.dict_id_seqs.items():
             for orflen, orf in self.simple_ORF_finder_example(seq, frame):
